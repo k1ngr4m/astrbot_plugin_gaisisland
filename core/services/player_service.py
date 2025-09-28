@@ -2,16 +2,16 @@ import time
 from typing import Optional
 
 from astrbot.api.event import filter, AstrMessageEvent
-from ..models.user import User
-from ...db.database import DatabaseManager
-from ..dao.user_dao import UserDAO
+from ..models.player import Player
+from ..db.database import DatabaseManager
+from ..dao.player_dao import PlayerDAO
 from ...enums.msg_enum import MsgEnum
 
 
-class UserService:
+class PlayerService:
     def __init__(self, db_manager: DatabaseManager):
         self.db = db_manager
-        self.user_dao = UserDAO(db_manager)
+        self.player_dao = PlayerDAO(db_manager)
 
     async def register_command(self, event: AstrMessageEvent):
         """用户注册命令"""
@@ -26,19 +26,19 @@ class UserService:
             return
 
         # 创建新用户
-        user = self.create_user(user_id, platform, group_id, nickname)
+        player = self.create_player(user_id, platform, group_id, nickname)
 
         # 发送注册成功消息
         yield event.plain_result(MsgEnum.REGISTRATION_SUCCESS.value.format(nickname))
 
-    def get_user(self, user_id: str) -> Optional[User]:
+    def get_user(self, user_id: str) -> Optional[Player]:
         """获取用户信息"""
-        return self.user_dao.get_user_by_id(user_id)
+        return self.player_dao.get_player_by_id(user_id)
 
-    def create_user(self, user_id: str, platform: str, group_id: str, nickname: str) -> User:
+    def create_player(self, user_id: str, platform: str, group_id: str, nickname: str) -> Player:
         """创建新用户"""
         now = int(time.time())
-        user = User(
+        player = Player(
             user_id=user_id,
             platform=platform,
             group_id=group_id,
@@ -47,5 +47,5 @@ class UserService:
             updated_at=now
         )
 
-        self.user_dao.create_user(user)
-        return user
+        self.player_dao.create_player(player)
+        return player

@@ -1,31 +1,31 @@
 from typing import Optional
 
-from ..models.user import User
-from ...db.database import DatabaseManager
+from ..models.player import Player
+from ..db.database import DatabaseManager
 
-class UserDAO:
+class PlayerDAO:
     """用户数据访问对象，封装所有用户相关的数据库操作"""
 
     def __init__(self, db_manager: DatabaseManager):
         self.db = db_manager
 
-    def get_user_by_id(self, user_id: str) -> Optional[User]:
+    def get_player_by_id(self, user_id: str) -> Optional[Player]:
         """根据用户ID获取用户信息"""
         result = self.db.execute_query(
-            "SELECT * FROM users WHERE user_id = ?",
+            "SELECT * FROM players WHERE user_id = ?",
             (user_id,)
         )
         if result:
-            return User(*result[0])
+            return Player(*result[0])
         return None
 
-    def create_user(self, user: User) -> bool:
+    def create_player(self, player: Player) -> bool:
         """创建新用户"""
         try:
             self.db.execute_query(
-                """INSERT INTO users (user_id, platform, group_id, nickname, created_at, updated_at)
+                """INSERT INTO players (user_id, platform, group_id, nickname, created_at, updated_at)
                    VALUES (?, ?, ?, ?, ?, ?)""",
-                (user.user_id, user.platform, user.group_id, user.nickname, user.created_at, user.updated_at)
+                (player.user_id, player.platform, player.group_id, player.nickname, player.created_at, player.updated_at)
             )
             return True
         except Exception as e:

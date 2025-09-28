@@ -1,8 +1,8 @@
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
-from .db.database import DatabaseManager
-from .core.services.user_service import UserService
+from .core.db.database import DatabaseManager
+from .core.services.player_service import PlayerService
 
 
 class GaisislandPlugin(Star):
@@ -10,7 +10,7 @@ class GaisislandPlugin(Star):
         super().__init__(context)
         self.context = context
         self.db_manager = DatabaseManager()
-        self.user_service = UserService(self.db_manager)
+        self.player_service = PlayerService(self.db_manager)
 
 
     async def initialize(self):
@@ -21,9 +21,9 @@ class GaisislandPlugin(Star):
         """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""
         logger.info("盖之岛插件已卸载")
 
-    @filter.command("冒险注册")
+    @filter.command("注册")
     async def register_command(self, event: AstrMessageEvent):
-        async for result in self.user_service.register_command(event):
+        async for result in self.player_service.register_command(event):
             yield result
 
 

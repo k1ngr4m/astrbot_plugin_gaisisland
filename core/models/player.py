@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 
 @dataclass
-class User:
+class Player:
     """用户实体类"""
     user_id: str
     platform: str = "unknown"  # 平台 (qq, dingtalk, feishu等)
