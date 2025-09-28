@@ -325,32 +325,5 @@ VALUES
 11 — UX 与提示设计（群内简短、可读）
 ● 每次重要事件（扩地成功、季节变更、任务完成）在群里广播一句短消息，并可以 @ 谁 做了什么
 ● 避免写大量表格输出，优先用“卡片 + 文字摘要”。如果聊天平台支持图片/富文本，可生成小图示（例如进度条）
-12 — 示例：种植->收获完整流程（伪代码）
-def cmd_plant(user_id, group_id, plot_index, crop_key):
-    with db.transaction():
-        member = ensure_member(user_id, group_id)
-        plot = select_plot_for_update(group_id, plot_index)
-        if plot has crop -> return "该地已被占用"
-        template = get_crop_template(crop_key)
-        if not season_allowed(template, farm.season): return "当前季节不可种植"
-        if member.coins < template.base_cost: return "金币不足"
-        member.coins -= template.base_cost
-        grow_seconds = compute_grow_seconds(template.base_grow_seconds, member, plot, farm)
-        ready_at = now + grow_seconds
-        insert crop_instances(...)
-    return "种植成功，预计到期：..."
 
-13 — 扩展与平衡建议（设计原则）
-● 让钻石用于“便利/扩容/微付费路径”，不把所有强力收益绑定钻石
-● 奖牌用于活动/兑换限定摊位（如只用奖牌购买的装饰）
-● 作物等级成长速度不宜过快；可以让玩家专注少量作物升级（例如加速同类作物收益）以促进玩法选择性
-● 季节与天气带来短期变动，增加群聊讨论点（例如“这次暴雨大家都可以受益”）
-14 — 示例种子数据（快速启动）
-● crop_templates: lettuce, carrot, tomato, grape, milk (以你提供为模板)
-● expansion_costs: see table above
-● 初始 farm coins/gems 分配：farm.gems=5, farm.coins=500; 每新玩家 farm_member.coins += 200
-15 — 安全性、滥用防护
-● 防止刷分/脚本：给大量自动操作施加冷却（每个 player 每分钟 N 次命令）
-● 操作限制：同一 plot 同时只能有一个活跃 crop_instance
-● 日志审计：记录所有资源变更（谁、何时、什么动了多少）
 
