@@ -1,5 +1,10 @@
 name: Gaisisland # 这是你的插件的唯一识别名。
 desc: 盖之岛冒险类休闲养成游戏
-version: v0.0.1
+version: v0.1.0
 author: K1ngram
 repo: https://github.com/k1ngr4m/astrbot_plugin_gaisisland
+commands:
+  - name: /注册
+    desc: 注册账号
+  - name: /种植
+    desc: 在指定地块种植作物

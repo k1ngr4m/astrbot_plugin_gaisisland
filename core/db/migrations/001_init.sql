@@ -1,10 +1,12 @@
 CREATE TABLE IF NOT EXISTS players (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id TEXT NOT NULL, -- 聊天平台唯一 id (e.g. telegram user id)
-  username TEXT,
-  created_at INTEGER NOT NULL,
-  updated_at INTEGER NOT NULL,
-  UNIQUE(user_id)
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL, -- 聊天平台唯一 id (e.g. telegram user id)
+    platform TEXT,
+    group_id TEXT, -- 聊天群 id
+    nickname TEXT,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    UNIQUE(user_id, group_id)
 );
 
 -- 群/农场（群聊对应一个 farm）
@@ -164,3 +166,8 @@ CREATE TABLE IF NOT EXISTS expansion_costs (
   level INTEGER PRIMARY KEY, -- 新增到 level (plots total)
   gems_cost INTEGER NOT NULL
 );
+
+-- 示例数据:
+-- level 2 -> cost 5 gems; 3->10; 4->20; 5->40 ...
+INSERT OR IGNORE INTO expansion_costs(level, gems_cost) VALUES
+(2,5),(3,10),(4,20),(5,40),(6,80);

@@ -16,13 +16,25 @@ class PlayerDAO:
             (user_id,)
         )
         if result:
-            return Player(*result[0])
+            row = result[0]
+            return Player(
+                user_id=row['user_id'],
+                platform=row['platform'],
+                group_id=row['group_id'],
+                nickname=row['nickname'],
+                gold=20000,  # 默认值
+                exp=0,       # 默认值
+                level=1,     # 默认值
+                id=row['id'],
+                created_at=row['created_at'],
+                updated_at=row['updated_at']
+            )
         return None
 
     def create_player(self, player: Player) -> bool:
         """创建新用户"""
         try:
-            self.db.execute_query(
+            self.db.execute_update(
                 """INSERT INTO players (user_id, platform, group_id, nickname, created_at, updated_at)
                    VALUES (?, ?, ?, ?, ?, ?)""",
                 (player.user_id, player.platform, player.group_id, player.nickname, player.created_at, player.updated_at)
